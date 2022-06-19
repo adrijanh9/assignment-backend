@@ -3,11 +3,13 @@ const Customer = require("./models/Customer");
 const insurance = require("./insurance");
 const router = express.Router();
 
+//get all customers
 router.get("/customers", async (req, res) => {
 	const customers = await Customer.find();
 	res.send(customers);
 });
 
+//create new customer
 router.post("/customers", async (req, res) => {
 	const customer = new Customer({
 		_id: req.body._id,
@@ -20,11 +22,13 @@ router.post("/customers", async (req, res) => {
 	res.send(customer);
 });
 
+//get individual customer by id
 router.get("/customers/:id", async (req, res) => {
 	const customer = await Customer.findOne({ _id: req.params.id });
 	res.send(customer);
 });
 
+//endpoint calculate insurance given a customer id
 router.get("/customers/:id/insurance", async (req, res) => {
 	const customer = await Customer.findOne({ _id: req.params.id });
 
@@ -36,6 +40,7 @@ router.get("/customers/:id/insurance", async (req, res) => {
 	res.send({ insurance: insurance_price });
 });
 
+//update customer by id
 router.patch("/customers/:id", async (req, res) => {
 	try {
 		const customer = await Customer.findOne({ _id: req.params.id });
@@ -46,7 +51,6 @@ router.patch("/customers/:id", async (req, res) => {
 		if (req.body.birthdate) customer.birthdate = req.body.birthdate;
 
 		await customer.save();
-		res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 		res.send(customer);
 	} catch {
 		res.status(404);
@@ -54,6 +58,7 @@ router.patch("/customers/:id", async (req, res) => {
 	}
 });
 
+//delete customer by id
 router.delete("/customers/:id", async (req, res) => {
 	try {
 		await Customer.deleteOne({ _id: req.params.id });
@@ -65,5 +70,3 @@ router.delete("/customers/:id", async (req, res) => {
 });
 
 module.exports = router;
-
-

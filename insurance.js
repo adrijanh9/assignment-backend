@@ -16,9 +16,9 @@ module.exports = function calculateInsurance(city, dateofbirth) {
 	let base_price;
 
 	if (basePriceData.find((o) => o.city == city)) {
-		base_price = basePriceData.find((o) => o.city == city)["amount"];
+		base_price = basePriceData.find((o) => o.city === city)["amount"];
 	} else {
-		base_price = basePriceData.find((o) => o.city == "other")["amount"];
+		base_price = basePriceData.find((o) => o.city === "other")["amount"];
 	}
 
 	const age = calculateAge(dateofbirth);
@@ -26,8 +26,6 @@ module.exports = function calculateInsurance(city, dateofbirth) {
 	let discount = discountData.find(
 		(o) => age >= o.age.split("-")[0] && age <= o.age.split("-")[1]
 	).discount;
-
-	console.log("discount " + discount);
 
 	return base_price - base_price * (discount / 100);
 };
